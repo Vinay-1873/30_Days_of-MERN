@@ -1,20 +1,27 @@
-const express= require('express')
-const dotenv=require('dotenv')
-const cors=require('cors')
-const connectDB=require('./config/db')
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+require('dotenv').config();
 
-dotenv.config()
-connectDB()
-const app=express();
+// Import our new routes
+const expenseRoutes = require('./routes/expenseRouter');
+
+const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-app.get('/',(req,res)=>{
-    res.send('APi is runing...');
-});
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('✅ MongoDB Connected'))
+  .catch((err) => console.log('❌ Database connection error:', err));
 
+// Mount Routes - This attaches our routes to the /api/expenses endpoint
+app.use('/api/expenses', expenseRoutes);
+
+// Start Server
 const PORT = process.env.PORT || 5001;
-
-app.listen(PORT, ()=>{
-    console.log(`server is runing at ${PORT}`);
-})
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
