@@ -12,16 +12,28 @@ function App() {
     setSyncStatus('Typing...');
 
     // 2. Start a timer for 1000ms (1 second)
-    const delayDebounceFn = setTimeout(() => {
-      
-      // 3. This block ONLY runs if the user stops typing for a full second
+    const delayDebounceFn = setTimeout(async () => {
       setSyncStatus('Saving...');
       
-      // We will replace this console.log with your actual backend API call in Step 3
-      console.log('Simulating API call with payload:', markdownText);
-      
-      // Simulating network delay for the UI
-      setTimeout(() => setSyncStatus('Saved'), 500);
+      try {
+        // Hardcoded dummy ID for prototyping - replace with a real MongoDB ObjectId
+        const noteId = '6a4bbcd5d991d586b8cb061f'; 
+        
+        const response = await fetch(`http://localhost:5000/api/notes/${noteId}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: markdownText }),
+        });
+
+        if (response.ok) {
+          setSyncStatus('Saved');
+        } else {
+          setSyncStatus('Error');
+        }
+      } catch (error) {
+        console.error('Failed to sync:', error);
+        setSyncStatus('Error');
+      }
 
     }, 1000);
 
