@@ -5,11 +5,12 @@ const habitRoutes = require('./routes/habitRoutes');
 
 // Load environment variables
 dotenv.config();
-
 const app = express();
+app.use(express.json());
+const cors = require('cors');
+app.use(cors());
 
 // Middleware to parse JSON bodies
-app.use(express.json());
 
 // Wire up the routes we just built
 app.use('/api/habits', habitRoutes);

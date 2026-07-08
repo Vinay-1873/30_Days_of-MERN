@@ -1,6 +1,16 @@
 const Habit = require('../models/Habit');
 
 
+exports.getAllHabits = async (req, res) => {
+    try {
+        // Fetch all habits and sort them so the newest ones appear first
+        const habits = await Habit.find().sort({ createdAt: -1 });
+        return res.status(200).json(habits);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: 'Server error fetching habits' });
+    }
+};
 exports.createHabit = async (req, res) => {
     try {
         const { title } = req.body;
