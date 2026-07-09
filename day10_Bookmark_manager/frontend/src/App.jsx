@@ -7,6 +7,8 @@ function App() {
   const [bookmarks, setBookmarks] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [mode, setMode] = useState('in');
+  const [newUrl, setNewUrl] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchBookmarks = async () => {
@@ -37,9 +39,50 @@ function App() {
     });
   };
 
+  const handleAddBookmark = async (e) => {
+    e.preventDefault();
+    if (!newUrl) return;
+
+    setIsSubmitting(true);
+    try {
+      // Send just the URL (you must include https://)
+      await axios.post(import.meta.env.VITE_API_URL, { url: newUrl });
+      
+      setNewUrl(''); // Clear the input
+      
+      // Hacky but effective way to force the useEffect to re-fetch and show the new bookmark
+      setMode((prev) => prev); // Or better, extract fetchBookmarks outside useEffect and call it here
+      
+    } catch (error) {
+      console.error('Error adding bookmark:', error);
+      alert('Failed to add bookmark. Make sure it includes http:// or https://');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto p-8 font-sans text-gray-800">
       <h1 className="text-3xl font-extrabold mb-6">🔖 Bookmark Manager</h1>
+
+      {/* ---Bookmark Form --- */}
+      <form onSubmit={handleAddBookmark} className="mb-8 flex gap-3">
+        <input 
+          type="url" 
+          value={newUrl}
+          onChange={(e) => setNewUrl(e.target.value)}
+          placeholder="Paste a URL here (e.g., https://github.com)" 
+          className="flex-1 p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+        <button 
+          type="submit" 
+          disabled={isSubmitting}
+          className="bg-green-600 text-white font-bold py-3 px-6 rounded-lg shadow-sm hover:bg-green-700 transition-colors disabled:bg-green-400"
+        >
+          {isSubmitting ? 'Scraping...' : 'Add Link'}
+        </button>
+      </form>
 
       {/* --- Controls Section --- */}
       <div className="mb-8 p-6 bg-gray-100 rounded-xl shadow-sm">
