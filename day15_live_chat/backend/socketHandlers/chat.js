@@ -21,6 +21,7 @@ module.exports = (io, socket) => {
             io.to(data.roomId).emit('receive_message', {
                 _id: newMessage._id,
                 senderId: socket.user.id,
+                socketId: socket.id,
                 text: newMessage.text,
                 createdAt: newMessage.createdAt
             });
