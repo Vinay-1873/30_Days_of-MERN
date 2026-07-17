@@ -17,6 +17,8 @@ const createPoll = async (req, res) => {
       options: formattedOptions,
     });
 
+    const io = req.app.get('io');
+    io.emit('new_poll_created', newPoll);
     res.status(201).json(newPoll);
   } catch (error) {
     res.status(500).json({ message: 'Server error creating poll', error: error.message });

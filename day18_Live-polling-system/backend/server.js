@@ -20,10 +20,12 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // Your React frontend URL
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"]
   }
 });
+
+app.set('io', io);
 
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'Server is running normally' });
@@ -31,7 +33,7 @@ app.get('/api/health', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
-
+  pollHandler(io, socket);
   socket.on('disconnect', () => {
     console.log(`User disconnected: ${socket.id}`);
   });
