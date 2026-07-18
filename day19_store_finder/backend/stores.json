@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Tech Hub Electronics",
+    "address": "University Road, Gorakhpur",
+    "location": {
+      "type": "Point",
+      "coordinates": [83.3732, 26.7606]
+    }
+  },
+  {
+    "name": "Campus Coffee Stand",
+    "address": "Main Gate, Gorakhpur",
+    "location": {
+      "type": "Point",
+      "coordinates": [83.3710, 26.7620]
+    }
+  },
+  {
+    "name": "City Center Market",
+    "address": "Golghar, Gorakhpur",
+    "location": {
+      "type": "Point",
+      "coordinates": [83.3700, 26.7500]
+    }
+  }
+]
